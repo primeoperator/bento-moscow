@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Бенто от Ирины // Конструктор заказа</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #090608;
+      --card: #140d12;
+      --card-alt: #1d121a;
+      --accent: #ff4d79;
+      --accent-soft: rgba(255, 77, 121, 0.12);
+      --accent-hover: #ff2d62;
+      --text: #fbf7f9;
+      --muted: #a6939c;
+      --dim: #6d5b65;
+      --border: #2e1b27;
+      --border-active: #ff4d79;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      --notice-bg: rgba(255, 180, 0, 0.08);
+      --notice-text: #fcd34d;
+      --notice-border: rgba(252, 211, 77, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 14px 14px 100px 14px;
+      background-image: radial-gradient(circle at 50% 0%, rgba(255, 77, 121, 0.1) 0%, transparent 60%);
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .brand-header {
+      background: linear-gradient(180deg, var(--card) 0%, var(--card-alt) 100%);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-name {
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .badge-geo {
+      background: var(--accent-soft);
+      border: 1px solid rgba(255, 77, 121, 0.35);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .brand-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .step-card {
+      background: linear-gradient(180deg, var(--card) 0%, #100a0e 100%);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .step-tag {
+      color: var(--accent);
+      font-size: 0.7rem;
+      background: var(--accent-soft);
+      border: 1px solid rgba(255, 77, 121, 0.3);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .options-grid.single-col {
+      grid-template-columns: 1fr;
+    }
+
+    .chip-btn {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .chip-btn.row-layout {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+    }
+
+    .chip-btn:active {
+      transform: scale(0.98);
+    }
+
+    .chip-btn.selected {
+      background: var(--accent-soft);
+      border-color: var(--border-active);
+      box-shadow: 0 0 0 1px var(--border-active), 0 4px 18px rgba(255, 77, 121, 0.25);
+    }
+
+    .chip-btn.selected .chip-title {
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .chip-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chip-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .chip-price {
+      font-size: 0.84rem;
+      font-weight: 900;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .qty-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .qty-btn {
+      background: #0d080b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .qty-btn:active {
+      transform: scale(0.95);
+    }
+
+    .qty-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: 0 2px 10px rgba(255, 77, 121, 0.45);
+    }
+
+    .notice-box {
+      background: var(--notice-bg);
+      border: 1px solid var(--notice-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--notice-text);
+      line-height: 1.35;
+    }
+
+    .input-field {
+      width: 100%;
+      background: #0d080b;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 0.82rem;
+      color: var(--text);
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+    }
+
+    textarea.input-field {
+      min-height: 70px;
+      resize: none;
+    }
+
+    .file-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0d080b;
+      border: 1px dashed var(--border-active);
+      border-radius: 10px;
+      padding: 11px;
+      cursor: pointer;
+    }
+
+    .file-input-wrapper span {
+      font-size: 0.76rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(9, 6, 8, 0.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+    }
+
+    .bar-inner {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .price-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .price-total {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .btn-submit {
+      flex: 1;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-weight: 900;
+      font-size: 0.88rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 77, 121, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="brand-header">
+      <div class="brand-top">
+        <div class="brand-name">Бенто от Ирины 🍰</div>
+        <div class="badge-geo">м. Водный стадион</div>
+      </div>
+      <div class="brand-desc">
+        Авторские тортики в Москве. Во всех десертах нежный крем-чиз. Доставка в любые районы через Яндекс Доставку.
+      </div>
+    </div>
+
+    <!-- 1. Формат десерта -->
+    <div class="step-card">
+      <div class="step-title">
+        <span>1. Формат десерта</span>
+        <span class="step-tag">Обязательно</span>
+      </div>
+      
+      <div class="options-grid single-col">
+        <div class="chip-btn selected" id="opt-bento" onclick="selectBento(this)">
+          <div class="chip-title">🍰 Классический Бенто (500–550 г)</div>
+          <div class="chip-sub">Идеально для 1–4 человек. Нарисую любой рисунок на ваш выбор.</div>
+          <div class="chip-price">от 2 300 ₽</div>
+        </div>
+
+        <div class="chip-btn" id="opt-maxi-cake" onclick="selectBentoMaxi(this)">
+          <div class="chip-title">🎂 Бенто MAXI (1 кг)</div>
+          <div class="chip-sub">Большой формат для яркого праздника и компании.</div>
+          <div class="chip-price">от 3 800 ₽</div>
+        </div>
+
+        <div class="chip-btn" id="opt-mini" onclick="activateCard(this)">
+          <div class="chip-title">🧁 Cake to go MINI</div>
+          <div class="chip-sub">Тортики в удобных порционных стаканчиках. Выберите количество:</div>
+          <div class="qty-row">
+            <span class="qty-btn active" id="mini-btn-6" onclick="setMiniQty(event, 6, 2400)">6 шт · 2 400 ₽</span>
+            <span class="qty-btn" id="mini-btn-9" onclick="setMiniQty(event, 9, 3600)">9 шт · 3 600 ₽</span>
+          </div>
+        </div>
+
+        <div class="chip-btn" id="opt-maxi" onclick="activateCard(this)">
+          <div class="chip-title">☕️ Cake to go MAXI</div>
+          <div class="chip-sub">Увеличенные порции десерта в стакане. Выберите количество:</div>
+          <div class="qty-row">
+            <span class="qty-btn active" id="maxi-btn-1" onclick="setMaxiQty(event, 1, 1200)">1 шт · 1 200 ₽</span>
+            <span class="qty-btn" id="maxi-btn-2" onclick="setMaxiQty(event, 2, 2400)">2 шт · 2 400 ₽</span>
+            <span class="qty-btn" id="maxi-btn-4" onclick="setMaxiQty(event, 4, 4800)">4 шт · 4 800 ₽</span>
+            <span class="qty-btn" id="maxi-btn-6" onclick="setMaxiQty(event, 6, 7200)">6 шт · 7 200 ₽</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Бисквит -->
+    <div class="step-card">
+      <div class="step-title">
+        <span>2. Бисквит</span>
+      </div>
+      <div class="options-grid">
+        <div class="chip-btn row-layout selected" onclick="selectOption(this, 'biscuit', 'Шоколадный 🍫')">
+          <span class="chip-title">Шоколадный 🍫</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'biscuit', 'Ванильный 🍼')">
+          <span class="chip-title">Ванильный 🍼</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'biscuit', 'Морковно-апельсиновый 🥕🍊')">
+          <span class="chip-title">Морковно-апельсин 🥕🍊</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'biscuit', 'Лавандовый 🪻')">
+          <span class="chip-title">Лавандовый 🪻</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'biscuit', 'Фисташковый 🥜')">
+          <span class="chip-title">Фисташковый 🥜</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Начинка -->
+    <div class="step-card">
+      <div class="step-title">
+        <span>3. Начинка</span>
+      </div>
+      <div class="options-grid">
+        <div class="chip-btn row-layout selected" onclick="selectOption(this, 'taste', 'Клубника 🍓')">
+          <span class="chip-title">Клубника 🍓</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'taste', 'Вишня 🍒')">
+          <span class="chip-title">Вишня 🍒</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'taste', 'Карамель (с арахисом/без) 🍯')">
+          <span class="chip-title">Карамель 🍯🥜</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'taste', 'Шоколадный крем 🍫')">
+          <span class="chip-title">Шоколадный крем 🍫</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'taste', 'Манго-маракуйя 🥭')">
+          <span class="chip-title">Манго-маракуйя 🥭</span>
+        </div>
+        <div class="chip-btn row-layout" onclick="selectOption(this, 'taste', 'Малина ❤️')">
+          <span class="chip-title">Малина ❤️</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <span>💡</span>
+      <span>Финальная стоимость может незначительно меняться в зависимости от сложности рисунка и декора.</span>
+    </div>
+
+    <!-- 4. Дизайн и рисунок -->
+    <div class="step-card">
+      <div class="step-title">
+        <span>4. Дизайн и надпись</span>
+      </div>
+      
+      <textarea class="input-field" id="order-text" placeholder="Напишите текст надписи на тортике или опишите желаемый рисунок..."></textarea>
+
+      <div class="file-input-wrapper" onclick="alert('В готовом боте клиент сможет прикрепить фото/картинку рисунка из галереи!')">
+        <span style="font-size:1.15rem;">📷</span>
+        <span>Прикрепить картинку / референс</span>
+      </div>
+    </div>
+
+    <!-- 5. Оформление заказа -->
+    <div class="step-card">
+      <div class="step-title">
+        <span>5. Оформление заказа</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <input type="text" class="input-field" id="order-date" placeholder="Дата и время получения (например: 25.10 к 15:00)" />
+        <input type="text" class="input-field" id="client-phone" placeholder="Ваш Telegram / Телефон для связи" />
+        <input type="text" class="input-field" id="client-address" placeholder="Самовывоз (м. Водный стадион) или адрес доставки" />
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bar-inner">
+      <div class="price-meta">
+        <span class="price-label">Итого от:</span>
+        <span class="price-total" id="total-price">2 300 ₽</span>
+      </div>
+      <button class="btn-submit" onclick="submitOrder()">Заказать</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedType = "Бенто-торт (500–550 г)";
+    let currentPrice = 2300;
+    let selectedBiscuit = "Шоколадный 🍫";
+    let selectedTaste = "Клубника 🍓";
+
+    let currentMiniQty = 6;
+    let currentMiniPrice = 2400;
+
+    let currentMaxiQty = 1;
+    let currentMaxiPrice = 1200;
+
+    function clearFormatSelection() {
+      document.querySelectorAll('.step-card:nth-child(2) .chip-btn').forEach(b => b.classList.remove('selected'));
+    }
+
+    function selectBento(el) {
+      clearFormatSelection();
+      el.classList.add('selected');
+      selectedType = "Бенто-торт (500–550 г)";
+      currentPrice = 2300;
+      updatePrice();
+    }
+
+    function selectBentoMaxi(el) {
+      clearFormatSelection();
+      el.classList.add('selected');
+      selectedType = "Бенто MAXI (1 кг)";
+      currentPrice = 3800;
+      updatePrice();
+    }
+
+    function activateCard(el) {
+      clearFormatSelection();
+      el.classList.add('selected');
+      if (el.id === 'opt-mini') {
+        selectedType = `Cake to go MINI (${currentMiniQty} шт)`;
+        currentPrice = currentMiniPrice;
+      } else if (el.id === 'opt-maxi') {
+        selectedType = `Cake to go MAXI (${currentMaxiQty} шт)`;
+        currentPrice = currentMaxiPrice;
+      }
+      updatePrice();
+    }
+
+    function setMiniQty(e, qty, price) {
+      e.stopPropagation();
+      currentMiniQty = qty;
+      currentMiniPrice = price;
+
+      document.querySelectorAll('#opt-mini .qty-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+
+      clearFormatSelection();
+      document.getElementById('opt-mini').classList.add('selected');
+      selectedType = `Cake to go MINI (${qty} шт)`;
+      currentPrice = price;
+      updatePrice();
+    }
+
+    function setMaxiQty(e, qty, price) {
+      e.stopPropagation();
+      currentMaxiQty = qty;
+      currentMaxiPrice = price;
+
+      document.querySelectorAll('#opt-maxi .qty-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+
+      clearFormatSelection();
+      document.getElementById('opt-maxi').classList.add('selected');
+      selectedType = `Cake to go MAXI (${qty} шт)`;
+      currentPrice = price;
+      updatePrice();
+    }
+
+    function selectOption(el, category, val) {
+      el.parentElement.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      if (category === 'biscuit') selectedBiscuit = val;
+      if (category === 'taste') selectedTaste = val;
+    }
+
+    function updatePrice() {
+      document.getElementById('total-price').innerText = currentPrice.toLocaleString('ru-RU') + " ₽";
+    }
+
+    function submitOrder() {
+      const text = document.getElementById('order-text').value.trim() || 'Без надписи';
+      const date = document.getElementById('order-date').value.trim() || 'Не указана';
+      const contact = document.getElementById('client-phone').value.trim() || '@username';
+      const address = document.getElementById('client-address').value.trim() || 'Самовывоз / Не указан';
+
+      const summary = 
+        `🎂 НОВЫЙ ЗАКАЗ:\n\n` +
+        `• Формат: ${selectedType}\n` +
+        `• Бисквит: ${selectedBiscuit}\n` +
+        `• Начинка: ${selectedTaste}\n` +
+        `• Крем: Крем-чиз\n\n` +
+        `🎨 Дизайн: ${text}\n` +
+        `📅 Дата/время: ${date}\n` +
+        `📍 Доставка: ${address}\n` +
+        `👤 Клиент: ${contact}\n\n` +
+        `💰 Предварительно от: ${currentPrice.toLocaleString('ru-RU')} ₽`;
+
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
+        window.Telegram.WebApp.sendData(summary);
+      } else {
+        alert(summary + "\n\n(В готовом боте эта карточка улетает сразу в личку кондитеру!)");
+      }
+    }
+
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+  </script>
+</body>
+</html>
