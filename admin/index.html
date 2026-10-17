@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кабинет Ирины</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#f3e3c8;--panel:#fff4dc;--ink:#3a2431;--gold:#ffcf40;--line:#3a2431;color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1a30;--panel:#3d2848;--ink:#fff4dc;--line:#ff8fb1}}
+:root[data-theme="dark"]{--bg:#2a1a30;--panel:#3d2848;--ink:#fff4dc;--line:#ff8fb1}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;padding:10px 10px 110px;background:var(--bg);color:var(--ink);font:9px/1.8 'Press Start 2P',ui-monospace,monospace}
+.w{max-width:1100px;margin:0 auto}
+h1{margin:0;font-size:13px;line-height:1.5}h1 small{display:block;font-size:8px;opacity:.7}h2{font-size:11px;margin:14px 0 6px}
+button,.btn{font:inherit;color:#3a2431;background:var(--gold);border:3px solid #3a2431;box-shadow:0 4px 0 #3a2431;padding:9px 10px;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+button:hover,.btn:hover{background:#ffe07a}button:active,.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #3a2431}
+button:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:0 4px 0 #3a2431}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #ff3d8b;outline-offset:2px}
+.mode{display:flex;gap:8px;margin:10px 0}.mode button{flex:1;background:#e6d3a8;font-size:8px}.mode button.on{background:var(--gold);transform:translateY(3px);box-shadow:none}
+#hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}#hud[hidden],#client[hidden],#owner[hidden],#m[hidden],#pn[hidden],#rc[hidden]{display:none}
+#lv{font-size:8px}.xp{width:120px;height:14px;border:3px solid var(--line);background:#2a1a30}.xp i{display:block;height:100%;width:0;background:#7fd6b0}
+#rev{background:#2a1a30;color:var(--gold);border:3px solid var(--gold);padding:6px 10px;font-size:11px}
+canvas{display:block;width:100%;image-rendering:pixelated;border:4px solid var(--line);background:#2a1a30;box-shadow:0 6px 0 rgba(0,0,0,.3);touch-action:none}
+#bc{aspect-ratio:4/3}#oc{aspect-ratio:16/9}
+.hint{margin:10px 0;opacity:.8}#log{border:3px solid var(--line);padding:8px 10px;min-height:56px;font-size:8px;line-height:1.9}#log div{overflow-wrap:anywhere}
+#client{max-width:540px;margin:0 auto}
+.tabs{display:flex;gap:6px;margin:10px 0 12px}.tabs button{flex:1;padding:9px 2px;font-size:7px;background:#e6d3a8}.tabs button.on{background:var(--gold);transform:translateY(3px);box-shadow:none}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}.g1{display:grid;gap:10px}
+.o{display:flex;align-items:center;gap:8px;text-align:left;font-size:8px;line-height:1.6;background:var(--panel);color:var(--ink);border-color:var(--line);box-shadow:0 4px 0 var(--line)}
+.o.on{background:var(--gold);color:#3a2431;transform:translateY(3px);box-shadow:none}.o i{flex:none;width:18px;height:18px;border:3px solid #3a2431}.o em{flex:none;font-style:normal;font-size:18px}.o small{display:block;font-size:7px;opacity:.7}
+.lb{margin:14px 0 8px;opacity:.85}
+input{width:100%;font:inherit;padding:10px;border:3px solid var(--line);background:#fff;color:#3a2431}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:4px solid var(--line);z-index:5}
+.bar .in{display:flex;gap:12px;align-items:center;justify-content:space-between;max-width:540px;margin:0 auto}
+#price{font-size:11px;color:#b8860b;line-height:1.5}#price small{display:block;font-size:7px;color:var(--ink);opacity:.7}
+.ov{position:fixed;inset:0;display:grid;place-items:center;padding:12px;background:rgba(20,10,25,.55);z-index:10}
+.cd{position:relative;width:min(580px,100%);max-height:90vh;overflow:auto;background:#fff4dc;color:#3a2431;border:4px solid #3a2431;box-shadow:0 0 0 4px var(--gold),8px 8px 0 4px rgba(0,0,0,.4);padding:14px;animation:pop .28s steps(5)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.cd h2{margin:0 0 8px}.x{position:absolute;right:8px;top:8px;padding:4px 7px;box-shadow:0 3px 0 #3a2431}
+.hd{display:flex;gap:12px;align-items:center;margin:0 0 8px;padding-right:34px}.hd i{width:34px;height:34px;border-radius:50%;border:3px solid #3a2431;display:grid;place-items:center;font-style:normal;font-size:13px;flex:none}
+.hd a{color:#c2185b;font-size:11px;overflow-wrap:anywhere}
+.row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:3px dashed rgba(58,36,49,.3)}.row b{text-align:right;font-weight:400}.row.t{color:#b8860b;font-size:11px;border:0}
+.bt{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}
+.pane{display:none}.pane.on{display:block;animation:sw .2s steps(4)}@keyframes sw{from{opacity:0;transform:translateX(12px)}}
+#cl{height:190px;overflow-y:auto;border:3px solid #3a2431;padding:8px;display:flex;flex-direction:column;gap:8px;background:#efe0bd}
+.msg{max-width:80%;padding:7px 9px;border:3px solid #3a2431;background:#fff;overflow-wrap:anywhere;line-height:1.6}.msg.me{align-self:flex-end;background:#9fe3c8}.msg small{display:block;font-size:7px;opacity:.55;text-align:right}.msg.new{animation:sw .2s steps(3)}.msg.ty{opacity:.7}
+.tg{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.tg input{flex:1 1 180px}
+#toast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);max-width:92%;background:#2a1a30;color:#ffcf40;border:3px solid #ffcf40;padding:10px 14px;z-index:30;line-height:1.7;text-align:center}
+@media (pointer:coarse){input{font-size:16px}}
+@media (prefers-reduced-motion:reduce){.cd,.pane.on,.msg.new{animation:none}}
+</style></head><body>
+<div class="w">
+<h1 id="ttl"></h1>
+<div id="hud"><div><div id="lv"></div><div class="xp"><i id="xb"></i></div></div><div id="rev"></div><button id="skb">📦 Склад и квесты</button><span id="net">🔴 нет связи</span></div>
+<div class="tg" style="margin:0 0 10px"><button id="spawn">➕ Симулировать входящий заказ из Telegram</button><button id="snd">🔊 ЗВУК: ВКЛ</button></div>
+<canvas id="oc" width="960" height="540" aria-label="Пиксельная кондитерская"></canvas>
+<p class="hint">Тащи гостей между комнатами: статус заказа меняется, а клиент получает сообщение в Telegram. Тап по гостю открывает чек и диалог.</p>
+<div id="log" aria-live="polite"></div>
+</div>
+<div class="ov" id="m" hidden></div><div class="ov" id="pn" hidden></div><div id="toast" hidden></div>
+<script src="../shared/common.js"></script>
+<script>
+const ING={flour:['Мука',150],eggs:['Яйца',200],cheese:['Крем-чиз',600],butter:['Масло',450],fruit:['Ягоды и фрукты',500],box:['Коробки',250]},RCP={flour:1,eggs:2,cheese:2,butter:1,fruit:1,box:1};
+const QS=[['Принять 3 заказа','acc',3,300],['Отправить 2 заказа курьером','del',2,500],['Сделать закупку','buy',1,200]];
+const TITLES=['Новичок','Подмастерье','Мастер крема','Шеф-кондитер','Легенда Водного стадиона'];
+const ST=['Новый лид','В работе','Готов / Яндекс Доставка'];
+const NICKS=['@sweet_olga','@max_msk','@liza_cake','@tim_bento','@nastya.pink','@ivan_sladko','@polina_moscow'];
+const COL=['#ff8fb1','#7fd6b0','#8fb8ff','#ffcf40','#c79bff','#ff9f6e'],SK=['#ffd9b3','#e8b98a','#c58c5f'],HR=['#3a2431','#8a4b2a','#e6c45a','#222'];
+const R=(c,x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),w,h)};
+const txt=(c,s,x,y,z,col,al)=>{c.font=z+'px "Press Start 2P",monospace';c.fillStyle=col;c.textAlign=al||'left';c.fillText(s,Math.round(x),Math.round(y))};
+let AC,snd=true,T=0,last=0;
+function tone(f,d,ty,v,f2){if(!snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const o=AC.createOscillator(),k=AC.createGain(),n=AC.currentTime;o.type=ty||'square';o.frequency.setValueAtTime(f,n);if(f2)o.frequency.exponentialRampToValueAtTime(f2,n+d);k.gain.setValueAtTime(v||.05,n);k.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(k);k.connect(AC.destination);o.start(n);o.stop(n+d)}catch(e){}}
+const bell=()=>{tone(1319,.5,'triangle',.08);setTimeout(()=>tone(1760,.7,'triangle',.07),120)};
+const coinSnd=()=>{tone(988,.08);setTimeout(()=>tone(1319,.3),80)};
+let tt;function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,2600)}
+/* ---------- игровое состояние ---------- */
+const day=new Date().toISOString().slice(0,10);
+let G=LS.get('bento_game',null);
+if(!G||!G.stock)G={rev:4600,xp:0,stock:{flour:8,eggs:10,cheese:6,butter:6,fruit:6,box:8},q:{}};
+if(!G.q||G.q.day!==day)G.q={day,acc:0,del:0,buy:0,cl:[]};
+let cs=[],uid=0,cur=null,drag=null,hover=null,tab='order',lastId=0;
+const lvlOf=x=>1+Math.floor(Math.sqrt(x/40));
+function save(){LS.set('bento_game',G)}
+function hud(){const L=lvlOf(G.xp),a=40*(L-1)**2,b=40*L*L;$('#lv').textContent='УР.'+L+' '+TITLES[Math.min(L-1,4)];$('#xb').style.width=Math.round((G.xp-a)/(b-a)*100)+'%';$('#rev').textContent='🪙 '+money(G.rev)}
+function gain(n){const L=lvlOf(G.xp);G.xp+=n;if(lvlOf(G.xp)>L){toast('🎉 Новый уровень: '+TITLES[Math.min(lvlOf(G.xp)-1,4)]);[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.12),i*90))}hud()}
+function log(t){const e=document.createElement('div'),L=$('#log');e.textContent=tm()+'  '+t;L.prepend(e);while(L.children.length>6)L.lastChild.remove()}
+/* ---------- склад, квесты, статусы ---------- */
+function needs(c){const n={};for(const k in RCP)n[k]=RCP[k]*(c.k||1);return n}
+function useStock(c){if(c.cons)return true;const n=needs(c),miss=Object.keys(n).filter(k=>G.stock[k]<n[k]).map(k=>ING[k][0]);
+ if(miss.length){toast('Не хватает: '+miss.join(', ')+'. Загляни на склад 📦');tone(200,.2);return false}
+ for(const k in n)G.stock[k]-=n[k];c.cons=1;return true}
+function setZ(c,z,walk){if(c.z!==z){c.z=z;if(z>0&&!c.acc){c.acc=true;G.q.acc++;gain(10)}if(z===1)gain(15);tone(523,.08);setTimeout(()=>tone(784,.12),90);log(c.nick+' → '+ST[z])}
+ if(walk){c.state='go';c.tx=z*320+60+Math.random()*200;c.ty=330+Math.random()*140}save();syncStatus(c)}
+function toKitchen(c,walk){if(c.z!==1&&!useStock(c))return false;setZ(c,1,walk);return true}
+function say(c,t){c.say=t;c.sayT=T+3.5}
+function courier(c){if(c.z!==2||c.done)return;c.done=true;c.state='leave';c.tx=1000;c.ty=clamp(c.y,330,470);G.rev+=c.price;G.q.del++;gain(40);hud();
+ coins.push({x:c.x,y:c.y-120,t:0,s:'+'+money(c.price)});coinSnd();say(c,'Спасибо! Огонь!');log('🛵 Курьер забрал заказ '+c.nick+', +'+money(c.price));if(cur===c)cur=null;save();syncStatus(c)}
+let coins=[];
+function renderPn(){const p=$('#pn');let h='<div class="cd"><button class="btn x" id="pnx">✖</button><h2>📜 Квесты дня</h2>';
+ QS.forEach((q,i)=>{const v=Math.min(G.q[q[1]],q[2]),done=v>=q[2],cl=G.q.cl.includes(i);h+='<div class="row"><span>'+q[0]+' ('+v+'/'+q[2]+')</span>'+(cl?'<b>✔</b>':done?'<button class="btn" data-q="'+i+'">🪙 +'+q[3]+'</button>':'<b>🪙 '+q[3]+'</b>')+'</div>'});
+ h+='<h2>📦 Склад</h2>';for(const k in ING)h+='<div class="row"><span>'+ING[k][0]+': <b>'+G.stock[k]+'</b></span><button class="btn" data-b="'+k+'"'+(G.rev<ING[k][1]?' disabled':'')+'>+5 · 🪙'+ING[k][1]+'</button></div>';
+ p.innerHTML=h+'<p class="lb">Бенто тратит около 1 ед. каждого вида, MAXI вдвое больше. Монеты приносят доставленные заказы.</p></div>'}
+$('#pn').onclick=e=>{const b=e.target.closest('button');if(e.target.id==='pn'||(b&&b.id==='pnx')){$('#pn').hidden=true;return}if(!b)return;
+ if(b.dataset.q!=null){const i=+b.dataset.q;if(!G.q.cl.includes(i)){G.q.cl.push(i);G.rev+=QS[i][3];coinSnd();gain(20)}}
+ else if(b.dataset.b){const k=b.dataset.b;if(G.rev>=ING[k][1]){G.rev-=ING[k][1];G.stock[k]+=5;G.q.buy++;tone(660,.06);gain(5);log('📦 Закупка: '+ING[k][0]+' +5')}}
+ hud();save();renderPn()};
+$('#skb').onclick=()=>{renderPn();$('#pn').hidden=false;tone(660,.05)};
+/* ---------- кабинет: сцена ---------- */
+const oc=$('#oc'),ox=oc.getContext('2d'),W=960,H=540;
+const WL=['#f6c9d6','#e8c07a','#a9d8cf'],WS=['#eeb5c6','#dba95c','#8fc7bc'],FL=[['#f3e0c0','#ebd3a8'],['#d9d2c5','#c9c1b3'],['#e6efe0','#d4e3cf']];
+const SZ=Math.min(10,Math.floor(144/SHOP_CONFIG.name.length));
+function scene(c){for(let z=0;z<3;z++){const x=z*320;R(c,x,0,320,190,WL[z]);for(let i=0;i<320;i+=40)R(c,x+i,0,20,190,WS[z]);R(c,x,190,320,10,'#8a5a3a');for(let j=0;j<11;j++)for(let i=0;i<11;i++)R(c,x+i*30,200+j*30,30,30,FL[z][(i+j)&1])}
+ c.globalAlpha=Math.sin(T*9)>.85?.55:1;R(c,76,32,168,40,'#2a1a30');R(c,80,36,160,32,'#ff3d8b');R(c,84,40,152,24,'#2a1a30');c.shadowColor='#ff3d8b';c.shadowBlur=10;txt(c,SHOP_CONFIG.name,160,58,SZ,'#ff9ccb','center');c.shadowBlur=0;c.globalAlpha=1;
+ R(c,50,150,240,56,'#a0643a');R(c,50,150,8,8,'#c98a58');R(c,60,162,220,32,'#bfe9ff');for(let i=0;i<7;i++){const x=68+i*30;R(c,x,176,20,14,'#8a4b2a');R(c,x,170,20,8,['#ffb3c8','#ffe07a','#c9b3ff','#9fe3c8'][i%4]);R(c,x+8,165,4,5,'#e03355')}
+ R(c,0,326,18,118,'#6b4128');R(c,2,340,8,30,'#bfe9ff');
+ for(const k of[350,470]){R(c,k,78,100,112,'#555a66');R(c,k+12,106,76,70,'#222');for(let i=0;i<6;i++){const h=14+Math.abs(Math.sin(T*8+i*1.7+k))*30;R(c,k+16+i*12,176-h,10,h,i%2?'#ffb02e':'#ff5a1f');R(c,k+18+i*12,176-h*.5,6,h*.5,'#fff2a0')}}
+ R(c,345,204,270,10,'#c98a58');R(c,345,214,270,32,'#a0643a');R(c,360,194,26,10,'#fff');R(c,420,186,32,6,'#ffb3c8');R(c,420,190,32,14,'#6b3a22');
+ R(c,720,40,170,52,'#ffcf40');R(c,724,44,162,44,'#3a2431');txt(c,'ЯНДЕКС',805,62,9,'#ffcf40','center');txt(c,'ДОСТАВКА',805,80,9,'#ffcf40','center');
+ R(c,690,204,210,10,'#c98a58');R(c,690,214,210,32,'#a0643a');R(c,700,174,40,30,'#ffd9e6');R(c,716,168,8,36,'#ffcf40');R(c,800,178,40,26,'#c9b3ff');R(c,942,326,18,118,'#6b4128');
+ R(c,318,0,4,H,'#2a1a30');R(c,638,0,4,H,'#2a1a30')}
+const bub=c=>c.say&&c.sayT>T?c.say:c.done?'Спасибо! Огонь!':c.z===1?'Пахнет вкусно!':c.z===2?(c.acc?'Жду курьера!':'Готово?'):c.acc?'Заказ принят, жду!':c.wish;
+function person(c){const c2=ox,lift=c.state==='drag'?16:c===hover?5:0,ph=c.id,bob=c.mv?Math.abs(Math.sin(T*12+ph))*3:Math.sin(T*2+ph),y=Math.round(c.y)-lift-Math.round(bob),x=Math.round(c.x),gy=Math.round(c.y);
+ R(c2,x-12+lift/2,gy-3,24-lift,6,lift?'rgba(0,0,0,.15)':'rgba(0,0,0,.28)');const s=c.mv&&Math.sin(T*12+ph)>0;R(c2,x-9,y-12,6,s?9:12,'#3a2a4a');R(c2,x+3,y-12,6,s?12:9,'#3a2a4a');
+ R(c2,x-12,y-30,24,20,c.col);R(c2,x-15,y-28,3,14,c.col);R(c2,x+12,y-28,3,14,c.col);R(c2,x-9,y-48,18,18,c.sk);R(c2,x-9,y-51,18,8,c.hr);
+ R(c2,x-5+c.face,y-40,3,3,'#222');R(c2,x+3+c.face,y-40,3,3,'#222');R(c2,x-2+c.face,y-34,5,2,'#c0506a');if(c.done)R(c2,x+10,y-26,16,12,'#ff8fb1');
+ c2.font='8px "Press Start 2P",monospace';const nw=c2.measureText(c.nick).width,ly=y-62;R(c2,x-nw/2-24,ly-12,nw+34,20,'#2a1a30');c2.fillStyle=c.av;c2.beginPath();c2.arc(x-nw/2-12,ly-2,8,0,7);c2.fill();
+ txt(c2,c.nick[1].toUpperCase(),x-nw/2-12,ly+2,8,'#2a1a30','center');txt(c2,c.nick,x-nw/2+2,ly+2,8,'#fff');
+ const t=bub(c);c2.font='8px "Press Start 2P",monospace';const bw=Math.min(240,c2.measureText(t).width+16),by=ly-48+Math.round(Math.sin(T*2.2+ph)*3),bx=clamp(x-bw/2,4,W-bw-4);
+ R(c2,bx,by,bw,24,'#2a1a30');R(c2,bx+2,by+2,bw-4,20,'#fff4dc');R(c2,x-4,by+22,8,4,'#fff4dc');R(c2,x-2,by+26,4,3,'#fff4dc');txt(c2,t.slice(0,28),bx+8,by+16,8,'#3a2431')}
+function drawOwner(){scene(ox);if(drag&&drag.mv){const z=clamp(Math.floor(drag.c.x/320),0,2);ox.globalAlpha=.22;R(ox,z*320,0,320,H,'#ffcf40');ox.globalAlpha=1}
+ for(let z=0;z<3;z++){R(ox,z*320+8,6,304,18,'rgba(42,26,48,.88)');txt(ox,(z+1)+' '+['ВИТРИНА И ВХОД','КУХНЯ И ДЕКОР','ВЫДАЧА И КУРЬЕР'][z]+' ['+cs.filter(c=>c.z===z).length+']',z*320+16,19,8,'#ffe9b0')}
+ cs.slice().sort((a,b)=>a.y-b.y).forEach(person);for(const p of coins){ox.globalAlpha=Math.max(0,1-p.t/1.8);txt(ox,p.s,p.x,p.y,12,'#ffcf40','center');ox.globalAlpha=1}}
+function update(dt){for(const c of cs){if(c.state==='drag'){c.mv=false;continue}
+ const sp=(c.state==='enter'||c.state==='go')?80:c.state==='leave'?70:32,dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy);
+ if(d>2){c.x+=dx/d*sp*dt;c.y+=dy/d*sp*dt;c.mv=true;if(Math.abs(dx)>1)c.face=dx<0?-1:1;if(c.state==='enter'&&((c.st=(c.st||0)+dt)>.3)){c.st=0;tone(130,.05,'square',.04)}}
+ else{c.mv=false;if(c.state==='enter'||c.state==='go')c.state='idle';else if(c.state==='leave')c.dead=true;else if((c.wait-=dt)<=0){const zx=c.z*320;c.tx=clamp(c.x+(Math.random()-.5)*140,zx+30,zx+290);c.ty=clamp(c.y+(Math.random()-.5)*100,300,500);c.wait=2+Math.random()*4}}}
+ if(cur&&cur.dead){cur=null;render()}if(cs.some(c=>c.dead)){cs=cs.filter(c=>!c.dead);save()}coins.forEach(p=>{p.t+=dt;p.y-=32*dt});coins=coins.filter(p=>p.t<1.8)}
+const P=e=>{const r=oc.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}};
+const hit=p=>cs.filter(c=>c.state!=='leave'&&Math.abs(p.x-c.x)<=18&&p.y>=c.y-54&&p.y<=c.y+6).sort((a,b)=>b.y-a.y)[0]||null;
+oc.addEventListener('pointerdown',e=>{const p=P(e),c=hit(p);if(!c)return;drag={c,id:e.pointerId,sx:p.x,sy:p.y,dx:c.x-p.x,dy:c.y-p.y,mv:false};oc.setPointerCapture(e.pointerId);tone(500,.04)});
+oc.addEventListener('pointermove',e=>{const p=P(e);if(drag){const d=drag;if(!d.mv&&Math.hypot(p.x-d.sx,p.y-d.sy)>8){d.mv=true;d.c.state='drag';cur=null;render()}if(d.mv){d.c.x=clamp(p.x+d.dx,20,W-20);d.c.y=clamp(p.y+d.dy,150,H-6)}}else hover=hit(p);oc.style.cursor=drag&&drag.mv?'grabbing':(hover||drag)?'grab':'default'});
+function release(){if(!drag)return;const d=drag,c=d.c;drag=null;if(!d.mv){cur=c;tone(660,.05);render();return}
+ let z=clamp(Math.floor(c.x/320),0,2);if(z===1&&c.z!==1&&!useStock(c))z=c.z;c.state='idle';c.x=clamp(c.x,z*320+30,z*320+290);c.tx=c.x;c.y=clamp(c.y,300,500);c.ty=c.y;c.wait=2;setZ(c,z,false);tone(300,.06);render()}
+oc.addEventListener('pointerup',release);oc.addEventListener('pointercancel',release);oc.addEventListener('pointerleave',()=>{if(!drag)hover=null});
+/* ---------- карточка заказа ---------- */
+const row=(a,b,k)=>'<div class="row'+(k||'')+'"><span>'+a+'</span><b>'+b+'</b></div>';
+async function send(c){const i=$('#tm'),t=i.value.trim();if(!t){i.focus();return}i.value='';tone(880,.05);setTimeout(()=>tone(1319,.09),60);
+ try{const m=await api('/api/admin/orders/'+c.id+'/reply',{method:'POST',body:JSON.stringify({text:t})});pushMsg(c,m);log('→ '+c.nick+': '+t)}
+ catch(e){i.value=t;toast('Сообщение не доставлено. Проверьте связь и что клиент не заблокировал бота')}}
+function render(){const m=$('#m'),c=cur;if(!c){m.hidden=true;lastId=0;return}
+ if(lastId!==c.id){lastId=c.id;tab='order';delete m.dataset.k;
+  m.innerHTML='<div class="cd"><button class="btn x" id="mx" aria-label="Закрыть">✖</button><div class="hd"><i style="background:'+c.av+'">'+c.nick[1].toUpperCase()+'</i><div><a href="https://t.me/'+c.nick.replace('@','')+'" target="_blank" rel="noopener">'+c.nick+'</a><br><small id="stt"></small></div></div>'+
+  '<div class="tabs"><button data-t="order">📋 Заказ</button><button data-t="chat">💬 Диалог Telegram</button></div>'+
+  '<div class="pane" id="p-order">'+c.rows.map(r=>row(r[0],r[1])).join('')+row('К оплате','🪙 '+money(c.price),' t')+'<div class="bt"><button id="b1">✅ Принять заказ</button><button id="b2">👨‍🍳 Отправить на кухню</button><button id="b3">🛵 Вызвать курьера</button><button id="b4">💬 Ответить в Telegram</button></div></div>'+
+  '<div class="pane" id="p-chat"><div id="cl"></div><div class="tg"><input id="tm" placeholder="Ответить в Telegram..." autocomplete="off"><button id="bs">ОТПРАВИТЬ</button></div></div></div>'}
+ m.hidden=false;$('#stt').textContent=ST[c.z]+(c.acc?' · принят':'');$('#b1').disabled=c.acc;$('#b2').disabled=c.z===1;$('#b3').disabled=c.z!==2;
+ m.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));m.querySelectorAll('.pane').forEach(p=>{const on=p.id==='p-'+tab;if(on!==p.classList.contains('on'))p.classList.toggle('on',on)});
+ const k=c.msgs.length+':'+(c.typing?1:0);if(m.dataset.k!==k){const first=m.dataset.k===undefined,L=$('#cl');m.dataset.k=k;L.textContent='';
+  c.msgs.forEach((g,i)=>{const d=document.createElement('div'),s=document.createElement('small');d.className='msg'+(g.f==='m'?' me':'')+(!first&&!c.typing&&i===c.msgs.length-1?' new':'');d.textContent=g.t;s.textContent=g.h;d.append(s);L.append(d)});
+  if(c.typing){const d=document.createElement('div');d.className='msg ty';d.textContent='печатает…';L.append(d)}L.scrollTop=L.scrollHeight}}
+$('#m').onclick=e=>{const b=e.target.closest('button');if(!b||!cur){if(e.target.id==='m'){cur=null;render()}return}const c=cur;
+ if(b.dataset.t){if(tab!==b.dataset.t){tab=b.dataset.t;tone(784,.04);render();if(tab==='chat')$('#cl').scrollTop=1e6}return}tone(660,.05);
+ if(b.id==='mx')cur=null;else if(b.id==='b1'){if(!c.acc){c.acc=true;G.q.acc++;gain(10);log(c.nick+': заказ принят');say(c,'Ура, спасибо!');save();syncStatus(c)}}
+ else if(b.id==='b2')toKitchen(c,true);else if(b.id==='b3')courier(c);else if(b.id==='b4'){tab='chat';render();$('#cl').scrollTop=1e6;$('#tm').focus();return}else if(b.id==='bs'){send(c);return}render()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){cur=null;render();$('#pn').hidden=true}else if(e.key==='Enter'&&e.target.id==='tm'&&cur){e.preventDefault();send(cur)}});
+/* ---------- связь с сервером: REST + WebSocket ---------- */
+const API=SHOP_CONFIG.apiUrl,TGW=window.Telegram&&Telegram.WebApp,INIT=TGW?TGW.initData:'';
+if(TGW){TGW.ready();TGW.expand()}
+async function api(path,opt){const r=await fetch(API+path,Object.assign({headers:{'Content-Type':'application/json','X-Init-Data':INIT}},opt));if(!r.ok)throw new Error(r.status);return r.json()}
+const ZONE={new:0,accepted:0,work:1,ready:2};
+const statusOf=c=>c.done?'done':c.z===0?(c.acc?'accepted':'new'):c.z===1?'work':'ready';
+function syncStatus(c){api('/api/admin/orders/'+c.id,{method:'PATCH',body:JSON.stringify({status:statusOf(c)})}).catch(()=>toast('Нет связи с сервером: статус не сохранён'))}
+function pushMsg(c,m){if(c.msgs.some(x=>x.id===m.id))return;c.msgs.push(m);if(cur===c)render()}
+function leave(c){if(c.done)return;c.done=true;c.state='leave';c.tx=1000;c.ty=clamp(c.y,330,470)}
+function upsert(o,enter){let c=cs.find(x=>x.id===o.id);if(o.status==='done'){if(c)leave(c);return null}
+ const z=ZONE[o.status];
+ if(!c){const id=o.id;c=Object.assign({},o,{z,acc:o.status!=='new',done:false,cons:z>0?1:0,col:COL[id%6],sk:SK[id%3],hr:HR[id%4],av:COL[(id+2)%6],state:enter?'enter':'idle',x:enter?-20:z*320+60+Math.random()*200,y:enter?410:320+Math.random()*160,wait:Math.random()*3,mv:false,face:1,msgs:[]});
+  c.tx=enter?100+Math.random()*180:c.x;c.ty=enter?330+Math.random()*130:c.y;cs.push(c);(o.messages||[]).forEach(m=>pushMsg(c,m));return c}
+ c.acc=o.status!=='new';if(c.z!==z){c.z=z;c.state='go';c.tx=z*320+60+Math.random()*200;c.ty=330+Math.random()*140}
+ (o.messages||[]).forEach(m=>pushMsg(c,m));return null}
+async function load(){try{const list=await api('/api/admin/orders'),ids=new Set(list.map(o=>o.id));list.forEach(o=>upsert(o,false));cs.forEach(c=>{if(!ids.has(c.id))leave(c)})}catch(e){toast('Не удалось загрузить заказы')}}
+function online(on){const e=$('#net');e.textContent=on?'🟢 онлайн':'🔴 нет связи';}
+let ws,retry=0;
+function connect(){ws=new WebSocket(API.replace(/^http/,'ws')+'/ws?init_data='+encodeURIComponent(INIT));
+ ws.onopen=()=>{retry=0;online(true);load()};
+ ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}
+  if(m.type==='order_new'){if(upsert(m.order,true)){bell();log('🔔 Новый заказ '+m.order.nick+': '+m.order.short+', '+money(m.order.price))}}
+  else if(m.type==='order_update')upsert(m.order,false);
+  else if(m.type==='chat'){const c=cs.find(x=>x.id===m.order_id);if(c){pushMsg(c,m.message);if(m.message.f==='c'){say(c,m.message.t.slice(0,28));log('← '+c.nick+': '+m.message.t);tone(659,.06,'triangle',.07)}}}};
+ ws.onclose=()=>{online(false);setTimeout(connect,Math.min(15000,1000*2**retry++))};ws.onerror=()=>ws.close()}
+setInterval(()=>{if(ws&&ws.readyState===1)ws.send('ping')},25000);
+$('#spawn').onclick=async()=>{const free=NICKS.filter(n=>!cs.some(c=>c.nick===n));try{await api('/api/admin/simulate',{method:'POST',body:JSON.stringify({order:orderOf(randState(rnd(free.length?free:NICKS)))})})}catch(e){toast('Сервер недоступен')}};
+$('#snd').onclick=()=>{snd=!snd;$('#snd').textContent=snd?'🔊 ЗВУК: ВКЛ':'🔇 ЗВУК: ВЫКЛ';tone(880,.06)};
+function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;T+=dt;update(dt);drawOwner();requestAnimationFrame(loop)}
+$('#ttl').innerHTML=SHOP_CONFIG.name+'<small>Кабинет · '+SHOP_CONFIG.city+' · '+SHOP_CONFIG.metro+'</small>';document.title='Кабинет · '+SHOP_CONFIG.name;
+hud();online(false);connect();log(SHOP_CONFIG.name+': кабинет открыт. Новые заказы приходят сюда мгновенно.');
+requestAnimationFrame(loop);if(document.fonts&&document.fonts.load)document.fonts.load('8px "Press Start 2P"');
+</script></body></html>
